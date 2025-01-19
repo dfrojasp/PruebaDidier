@@ -14,6 +14,6 @@ steps:
 - task: Gradle@2  # Usando la tarea Gradle estándar
   inputs:
     gradleWrapperFile: './gradlew'  # Ruta al Gradle Wrapper (si estás usando uno)
-    options: 'clean test'  # Comando de Gradle para limpiar y ejecutar pruebas
+    options: 'gradlew clean test aggregate'  # Comando de Gradle para limpiar y ejecutar pruebas
     gradleHome: '$(Build.SourcesDirectory)/gradle'  # Si necesitas un directorio de Gradle específico, puedes configurarlo
 
