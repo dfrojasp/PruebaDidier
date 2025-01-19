@@ -1,5 +1,5 @@
 trigger:
-- main  # Ramas que activarán el pipeline automáticamente
+- master  # Ramas que activarán el pipeline automáticamente
 
 pool:
   vmImage: 'windows-latest'  # Utiliza un agente hospedado en Azure con Windows
