@@ -8,7 +8,7 @@ trigger:
       - master  # Usando la rama master
 
 pool:
-  vmImage: 'windows-latest'  # Usando agente Windows
+  vmImage: 'Default'  # Usando agente Windows
 
 steps:
 - task: Gradle@2  # Usando la tarea Gradle estándar
