@@ -10,9 +10,6 @@ trigger:
 pool:
   name: 'Default'  # Usando agente Windows
   
-variables:
-  GRADLE_OPTS: "-Xmx1024m"  # Configuración opcional de memoria para Gradle
-
 stages:
 - stage: Build_and_Test
   displayName: Build and Test Automation Project
