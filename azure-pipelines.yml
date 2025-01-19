@@ -1,4 +1,4 @@
-# Gradle
+
 # Build your Java project and run tests with Gradle using a Gradle wrapper script.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
@@ -21,20 +21,6 @@ stages:
     # 1. Descargar el código desde el repositorio
     - task: Checkout@1
       displayName: "Clonar el código del repositorio"
-
-    # 2. Instalar Java 18 (usando Chocolatey)
-    - script: |
-        echo Instalando Java 18...
-        choco install openjdk18 -y  # Usamos Chocolatey para instalar OpenJDK 18
-        java -version  # Verificamos la instalación de Java 18
-      displayName: "Instalar Java 18"
-
-    # 3. Instalar Gradle (usando Chocolatey)
-    - script: |
-        echo Instalando Gradle...
-        choco install gradle -y  # Usamos Chocolatey para instalar Gradle
-        gradle --version  # Verificamos la instalación de Gradle
-      displayName: "Instalar Gradle"
 
     # 4. Compilar el proyecto y ejecutar pruebas
     - script: |
