@@ -1,0 +1,51 @@
+trigger:
+- main  # Ramas que activarán el pipeline automáticamente
+
+pool:
+  vmImage: 'windows-latest'  # Utiliza un agente hospedado en Azure con Windows
+
+variables:
+  GRADLE_OPTS: "-Xmx1024m"  # Configuración opcional de memoria para Gradle
+
+stages:
+- stage: Build_and_Test
+  displayName: Build and Test Automation Project
+  jobs:
+  - job: Run_Tests
+    displayName: Build and Run Tests
+    steps:
+    # 1. Descargar el código desde el repositorio
+    - task: Checkout@1
+      displayName: "Clonar el código del repositorio"
+
+    # 2. Instalar y configurar Java
+    - task: UseJavaVersion@1
+      inputs:
+        versionSpec: '11'  # Cambiar según la versión de Java que uses
+        jdkArchitecture: 'x64'
+
+    # 3. Instalar Gradle
+    - script: |
+        echo Instalando Gradle...
+        choco install gradle -y  # Usamos Chocolatey para instalar Gradle
+        gradle --version  # Verificamos la instalación
+      displayName: "Instalar Gradle"
+
+    # 4. Compilar el proyecto y ejecutar pruebas
+    - script: |
+        echo Compilando el proyecto y ejecutando pruebas...
+        gradle clean test
+      displayName: "Compilar y ejecutar pruebas con Gradle"
+
+    # 5. Publicar resultados de pruebas (JUnit)
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFiles: '*/build/test-results/test/.xml'  # Ruta de resultados de pruebas generados por Gradle
+        testRunTitle: 'Resultados de pruebas automatizadas'
+
+    # 6. Publicar informes (opcional: Serenity o Allure)
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: 'build/reports/tests/test'  # Ruta del informe generado por Gradle
+        artifactName: 'TestReports'
+        publishLocation: 'Container'
