@@ -3,7 +3,7 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 trigger:
-- main  # Ramas que activarán el pipeline automáticamente
+- master  # Ramas que activarán el pipeline automáticamente
 
 pool:
   vmImage: 'windows-latest'  # Utiliza un agente hospedado en Azure con Windows
@@ -22,28 +22,28 @@ stages:
     - task: Checkout@1
       displayName: "Clonar el código del repositorio"
 
-    # 2. Instalar y configurar Java
-    - task: UseJavaVersion@1
-      inputs:
-        versionSpec: '11'  # Cambiar según la versión de Java que uses
-        jdkArchitecture: 'x64'
+    # 2. Instalar Java 18 (usando Chocolatey)
+    - script: |
+        echo Instalando Java 18...
+        choco install openjdk18 -y  # Usamos Chocolatey para instalar OpenJDK 18
+        java -version  # Verificamos la instalación de Java 18
+      displayName: "Instalar Java 18"
 
-    # 3. Instalar Gradle
+    # 3. Instalar Gradle (usando Chocolatey)
     - script: |
         echo Instalando Gradle...
         choco install gradle -y  # Usamos Chocolatey para instalar Gradle
-        gradle --version  # Verificamos la instalación
+        gradle --version  # Verificamos la instalación de Gradle
       displayName: "Instalar Gradle"
 
     # 4. Compilar el proyecto y ejecutar pruebas
     - script: |
         echo Compilando el proyecto y ejecutando pruebas...
-        gradlew clean test aggregate
+        gradlew clean test aggregate  # Usar el wrapper de Gradle
       displayName: "Compilar y ejecutar pruebas con Gradle"
 
     # 5. Publicar resultados de pruebas (JUnit)
     - task: PublishTestResults@2
       inputs:
-        testResultsFiles: '*/build/test-results/test/.xml'  # Ruta de resultados de pruebas generados por Gradle
+        testResultsFiles: '**/build/test-results/test/*.xml'  # Ruta de resultados de pruebas generados por Gradle
         testRunTitle: 'Resultados de pruebas automatizadas'
-
