@@ -20,17 +20,11 @@ stages:
     # 2. Compilar el proyecto y ejecutar pruebas
     - script: |
         echo Compilando el proyecto y ejecutando pruebas...
-        gradlew clean test aggregate
+        ./gradlew clean test aggregate
       displayName: "Compilar y ejecutar pruebas con Gradle"
 
-    # 3. Verificar los archivos generados
-    - script: |
-        echo "Archivos generados:"
-        dir build/test-results/test/
-      displayName: "Verificar archivos de resultados"
-
-    # 4. Publicar resultados de pruebas (JUnit)
+    # 3. Publicar resultados de pruebas (JUnit)
     - task: PublishTestResults@2
       inputs:
-        testResultsFiles: '**/build/test-results/test/*.xml'  # Ruta corregida
+        testResultsFiles: '**/build/test-results/test/*.xml'  # Ruta de los archivos de resultados de prueba generados por Gradle
         testRunTitle: 'Resultados de pruebas automatizadas'
