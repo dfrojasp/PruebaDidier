@@ -1,0 +1,24 @@
+trigger:
+- master  # La rama master es la que activa el pipeline
+
+pool:
+  name: 'Default'  # Usar el pool de agentes Default
+
+steps:
+# Paso 1: Descargar el código del repositorio
+- task: Checkout@1
+  displayName: 'Clonar el código del repositorio'
+
+# Paso 2: Ejecutar Gradle para limpiar, testear y agregar los resultados
+- script: |
+    echo "Ejecutando ./gradlew clean test aggregate..."
+    ./gradlew clean test aggregate
+  displayName: "Ejecutar Gradle: clean, test y aggregate"
+
+# Paso 3: Publicar los resultados de las pruebas (JUnit)
+- task: PublishTestResults@2
+  inputs:
+    testResultsFiles: '**/build/test-results/test/*.xml'  # Ruta de los archivos generados por Gradle
+    testRunTitle: 'Resultados de las pruebas automatizadas'
+  displayName: "Publicar resultados de las pruebas"
+
